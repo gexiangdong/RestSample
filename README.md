@@ -1,2 +1,2 @@
 # RestSample
-Spring+Jersey+Mybatis example
+使用Spring+Jersey+Mybatis的例子
