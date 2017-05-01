@@ -1,0 +1,44 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+						http://www.springframework.org/schema/tx
+					    http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+ 
+	<context:component-scan base-package="cn.devmgr.sample.service" />
+	<context:component-scan base-package="cn.devmgr.sample.rest.endpoint" />
+	
+	<!-- <bean id="transactionBo" class="com.mkyong.transaction.impl.TransactionBoImpl" /> -->
+
+    <!--
+        Instruct Spring to perform declarative transaction management
+        automatically on annotated classes.
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- =============== MyBATIS beans configuration ================== -->
+    <bean id="podcastDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+       <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+       <property name="mapperInterface" value="org.codingpedia.demo.rest.dao.PodcastDao" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
+    </bean>
+
+    <bean id="podcastRestService" class="org.codingpedia.demo.rest.service.PodcastRestService" />
+
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton">
+        <property name="jndiName" value="java:comp/env/jdbc/restDemoDB" />
+        <property name="resourceRef" value="true" />
+    </bean> 
+</beans>

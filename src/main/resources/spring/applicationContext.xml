@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd 
+						http://www.springframework.org/schema/tx
+					    http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+						http://mybatis.org/schema/mybatis-spring 
+						http://mybatis.org/schema/mybatis-spring.xsd">
+ 
+    <context:property-placeholder location="classpath:config.properties"/>  
+	<context:component-scan base-package="cn.devmgr.sample.service" />
+	<context:component-scan base-package="cn.devmgr.sample.rest.resource" />
+	<context:component-scan base-package="cn.devmgr.sample.rest.filter" />
+	<context:component-scan base-package="cn.devmgr.sample.component" />
+    <mybatis:scan base-package="cn.devmgr.sample.dao.mapper" />
+	
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+    </bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/testdb"/>
+        <property name="username" value="pgdbo"/>
+        <property name="password" value="sql"/>
+    </bean>
+
+    <!-- <bean id="user" class="cn.devmgr.sample.component.User" scope="request">
+       <aop:scoped-proxy proxy-target-class="false" />
+    </bean>
+     -->
+</beans>

@@ -1,0 +1,11 @@
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/exception/GenericExceptionMapper.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/exception/JsonMappingExceptionMapper.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/exception/GenericException.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/resource/SampleResource.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/domain/UserVo.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/service/OrderService.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/filter/AuthenticationFilter.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/app/SampleAppConfig.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/rest/exception/NullPointerExceptionMapper.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/domain/OrderItem.java
+/Users/gexiangdong/workspace/Sample/src/main/java/cn/devmgr/sample/domain/Order.java
