@@ -28,6 +28,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import cn.devmgr.sample.component.RequestContext;
 import cn.devmgr.sample.domain.Order;
 import cn.devmgr.sample.domain.User;
 import cn.devmgr.sample.rest.exception.GenericException;
@@ -54,9 +54,7 @@ public class SampleResource {
 	@Autowired
 	private OrderService orderService;
 	
-	@Autowired
-	private RequestContext requestContext;
-	
+
 	@GET
 	@Path("/hello")
 	@PermitAll
@@ -79,9 +77,9 @@ public class SampleResource {
     @Path("/order/{id:\\d+}/") 
     @GET
 	@RolesAllowed({"admin","user"})
-	public Map<String, Object> getOrder(@PathParam("id") int id) throws GenericException{
+	public Map<String, Object> getOrder(@PathParam("id") int id, @Context SecurityContext sc) throws GenericException{
     	if(log.isTraceEnabled()){
-			log.trace("readArray()" + id + "; requestContext is " + requestContext.getClass().getName() + "; user=" + requestContext.getLogin() + "  " + requestContext.getLogin().getClass().getName());
+			log.trace("readArray()" + id + "; requestContext is " + sc.getClass().getName() + "; user=" + sc.getUserPrincipal() + "  ");
 		}
     	Order order = orderService.getOrder(id);
     	HashMap<String, Object> result = new HashMap<String, Object>();
@@ -89,7 +87,7 @@ public class SampleResource {
     	result.put("otherthings", "no");
 		// result.put("user", requestContext.getUser().getName() + "," +
 		// requestContext.getUser().getId());
-    	result.put("user", requestContext.getLogin());
+    	result.put("user",  sc.getUserPrincipal());
     	return result;
     }
 	
