@@ -3,11 +3,27 @@ package cn.devmgr.sample.domain;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
+
 public class Order {
 	private int id;
+	@Null
 	private Date orderDate;
+	
+	//@Valid注解表示这个属性也需要验证
+	@Valid
+	@NotNull
 	private ConsigneeAddress consigneeAddress;
+
+	@Valid
+	@NotNull
+	@Size(min=1, message="至少需要有一件商品")
 	private List<OrderItem> orderItems;
+	
+	@Null
 	private int status;
 	
 	public int getId() {

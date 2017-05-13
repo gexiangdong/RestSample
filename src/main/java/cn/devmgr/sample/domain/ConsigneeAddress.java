@@ -1,12 +1,18 @@
 package cn.devmgr.sample.domain;
 
+import javax.validation.constraints.NotNull;
+
 public class ConsigneeAddress {
+	
+	@NotNull
 	private String province,city, district, address;
+	@NotNull
 	private String consignee, phone;
 	
 	public ConsigneeAddress(){
 		
 	}
+	
 	public ConsigneeAddress(String consignee, String phone, String province, String city, String district, String address){
 		this.consignee = consignee;
 		this.phone = phone;

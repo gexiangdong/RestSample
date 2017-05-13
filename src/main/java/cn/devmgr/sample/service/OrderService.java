@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.devmgr.sample.dao.mapper.OrderDao;
+import cn.devmgr.sample.dao.OrderDao;
 import cn.devmgr.sample.domain.ConsigneeAddress;
 import cn.devmgr.sample.domain.Order;
 import cn.devmgr.sample.domain.OrderItem;
@@ -22,8 +22,12 @@ public class OrderService {
 
 	@Autowired
 	private OrderDao orderDao;
-
-
+	
+	
+	@Transactional
+	public void append(Order order){
+		orderDao.insertOrder(order);
+	}
 	
 	@Transactional
 	public Order getOneOrder(int orderId){

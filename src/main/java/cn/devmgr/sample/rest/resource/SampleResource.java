@@ -8,9 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -34,7 +37,7 @@ import org.springframework.stereotype.Component;
 
 import cn.devmgr.sample.component.RequestContext;
 import cn.devmgr.sample.domain.Order;
-import cn.devmgr.sample.domain.UserVo;
+import cn.devmgr.sample.domain.User;
 import cn.devmgr.sample.rest.exception.GenericException;
 import cn.devmgr.sample.service.OrderService;
 
@@ -56,6 +59,7 @@ public class SampleResource {
 	
 	@GET
 	@Path("/hello")
+	@PermitAll
 	public Response sayHello() {
 		if(log.isTraceEnabled()){
 			log.trace("sayHello()");
@@ -74,6 +78,7 @@ public class SampleResource {
 	
     @Path("/order/{id:\\d+}/") 
     @GET
+	@RolesAllowed({"admin","user"})
 	public Map<String, Object> getOrder(@PathParam("id") int id) throws GenericException{
     	if(log.isTraceEnabled()){
 			log.trace("readArray()" + id + "; requestContext is " + requestContext.getClass().getName() + "; user=" + requestContext.getLogin() + "  " + requestContext.getLogin().getClass().getName());
@@ -88,17 +93,28 @@ public class SampleResource {
     	return result;
     }
 	
+    @PermitAll
+    @Path("/order/")
+    @POST
+    public Map<String, Object> createOrder(@Valid Order order){
+    	orderService.append(order);
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	result.put("order",  order);
+    	return result;
+    }
+    
+    
 	@PermitAll
 	@Path("/users/") 
     @GET 
-	public List<UserVo> readPingjiaHistories(){
+	public List<User> readPingjiaHistories(){
 		return getPingjiaHistories(null, null);
 	}
 	
 	@RolesAllowed({"admin","users"})
 	@Path("/histories/{beginDate:\\d{4}-\\d{2}-\\d{2}},{endDate:\\d{4}-\\d{2}-\\d{2}}/") 
     @GET 
-	public List<UserVo> readPingjiaHistories(@PathParam("beginDate") String beginDate, 
+	public List<User> readPingjiaHistories(@PathParam("beginDate") String beginDate, 
     		@PathParam("endDate")  String endDate) throws ParseException {
 		if(log.isTraceEnabled()){
 			log.trace("readPingjiaHistories(" + beginDate + " ~ " + endDate + ")");
@@ -107,15 +123,15 @@ public class SampleResource {
 	}
 	
 	
-	private List<UserVo> getPingjiaHistories(Date beginDate, Date endDate){
-		ArrayList<UserVo> list = new ArrayList<UserVo>();
+	private List<User> getPingjiaHistories(Date beginDate, Date endDate){
+		ArrayList<User> list = new ArrayList<User>();
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		for(int i=0; i< 20; i++){
-			UserVo user = new UserVo();
+			User user = new User();
 			list.add(user);
 		}
 		
@@ -124,7 +140,8 @@ public class SampleResource {
 
 
 	@POST
-	public Map<String, Object> createSomething(@FormParam("name") String name, @FormParam("score") int score){
+	@DenyAll
+	public Map<String, Object> createSomething(@NotNull @FormParam("name") String name, @FormParam("score") int score){
 		if(log.isTraceEnabled()){
 			log.trace("createSomething......" + name + "; " + score);
 		}
