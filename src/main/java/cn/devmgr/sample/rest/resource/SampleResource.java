@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import cn.devmgr.sample.domain.Order;
 import cn.devmgr.sample.domain.User;
@@ -42,7 +43,7 @@ import cn.devmgr.sample.rest.exception.GenericException;
 import cn.devmgr.sample.service.OrderService;
 
 
-@Component
+@Controller
 @Path("/samples/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

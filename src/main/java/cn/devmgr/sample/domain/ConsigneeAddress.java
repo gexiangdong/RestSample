@@ -1,8 +1,11 @@
 package cn.devmgr.sample.domain;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 
-public class ConsigneeAddress {
+public class ConsigneeAddress  implements Serializable{
+	static final long serialVersionUID = -524091337541387004L;
 	
 	@NotNull
 	private String province,city, district, address;

@@ -29,18 +29,31 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:mybatis.xml"/>
     </bean>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://localhost:5432/testdb"/>
-        <property name="username" value="pgdbo"/>
-        <property name="password" value="sql"/>
-    </bean>
+    <!-- 在tomcat启动参数中 spring.profiles.active=production 可设置使用某个profile; 
+         在web.xml设置context-param spring.profiles.default 可设置缺省使用profile  -->
+    <beans profile="development">
+        <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://127.0.0.1:5432/testdb?stringtype=unspecified"/>
+            <property name="username" value="pgdbo"/>
+            <property name="password" value="sql"/>
+            <property name="maxTotal" value="10"></property>
+            <property name="maxIdle" value="5"></property>
+            <property name="maxWaitMillis" value="5000"></property>
+        </bean>
+    </beans>
+    <beans profile="production">
+        <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://127.0.0.1:5432/testdb?stringtype=unspecified"/>
+            <property name="username" value="pgdbo"/>
+            <property name="password" value="sql"/>
+            <property name="maxTotal" value="50"></property>
+            <property name="maxIdle" value="20"></property>
+            <property name="maxWaitMillis" value="10000"></property>
+        </bean>
+    </beans>
 
-    <!-- <bean id="user" class="cn.devmgr.sample.component.User" scope="request">
-       <aop:scoped-proxy proxy-target-class="false" />
-    </bean>
-     -->
 </beans>

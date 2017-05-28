@@ -1,5 +1,6 @@
 package cn.devmgr.sample.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
-public class Order {
+public class Order implements Serializable{
+	private static final long serialVersionUID = -2490657086698549998L;
+	
 	private int id;
 	@Null
 	private Date orderDate;

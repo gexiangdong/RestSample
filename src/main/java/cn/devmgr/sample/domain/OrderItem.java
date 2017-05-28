@@ -1,11 +1,15 @@
 package cn.devmgr.sample.domain;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-public class OrderItem {
+public class OrderItem  implements Serializable{
+	private static final long serialVersionUID = -3975898975212474960L;
+	
 	@NotNull
 	private String giftId;
 	private String giftName;

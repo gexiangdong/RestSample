@@ -8,6 +8,9 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,8 @@ import cn.devmgr.sample.domain.ConsigneeAddress;
 import cn.devmgr.sample.domain.Order;
 import cn.devmgr.sample.domain.OrderItem;
 
+// CacheConfig设置了cacheNames后，此类的方法中的CacheEvict/CachePut/Cacheable等则不在需要设置名字，仅仅设置key（自动计算key）即可
+@CacheConfig(cacheNames="order")
 @Service
 public class OrderService {
 	private static final Log log = LogFactory.getLog(OrderService.class);
@@ -29,6 +34,11 @@ public class OrderService {
 		orderDao.insertOrder(order);
 	}
 	
+	
+	/**
+	 * key的表达式设置可以参照 Spring Cache SpEL (http://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/html/cache.html#cache-spel-context)
+	 */
+	@CachePut(key="#result.id")
 	@Transactional
 	public Order getOneOrder(int orderId){
 
@@ -57,6 +67,7 @@ public class OrderService {
 		return newOrder;
 	}
 	
+	@Cacheable(key="#id")
 	public Order getOrder(int id){
 		return orderDao.getOrderById(id);
 	}
