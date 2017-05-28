@@ -5,9 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,13 +20,14 @@ import cn.devmgr.sample.domain.ConsigneeAddress;
 import cn.devmgr.sample.domain.Order;
 import cn.devmgr.sample.domain.OrderItem;
 
+// 也可以使用JSR-107的cache注解；此处使用的是spring cache annotation
 // CacheConfig设置了cacheNames后，此类的方法中的CacheEvict/CachePut/Cacheable等则不在需要设置名字，仅仅设置key（自动计算key）即可
 @CacheConfig(cacheNames="order")
 @Service
 public class OrderService {
 	private static final Log log = LogFactory.getLog(OrderService.class);
 
-	@Autowired
+	@Resource
 	private OrderDao orderDao;
 	
 	

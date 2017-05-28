@@ -8,9 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,9 +34,15 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.Session;
+
+import org.springframework.jms.core.MessageCreator;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 
 import cn.devmgr.sample.domain.Order;
@@ -52,9 +60,12 @@ public class SampleResource {
 	
 	private @Value("${fileFolder}") String fileFolder;
 
-	@Autowired
+	// @Resource注解是JSR-250标准；可替代spring @Autowired
+	@Resource
 	private OrderService orderService;
 	
+	@Resource
+	private JmsTemplate jmsTemplate;
 
 	@GET
 	@Path("/hello")
@@ -71,6 +82,12 @@ public class SampleResource {
 			result = "order is null....";
 		}
 		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("orderId",  order.getId());
+		map.put("date", new Date().getTime());
+	    jmsTemplate.convertAndSend("order-response-queue", map);
+       
+	   
 		result += "<br/> config.properties: fileFolder=" + fileFolder;
 		return Response.status(200).entity(result).build();
 	}
