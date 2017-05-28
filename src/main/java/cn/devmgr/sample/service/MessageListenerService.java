@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 public class MessageListenerService {
 	private final static Log log = LogFactory.getLog(MessageListenerService.class);
 	
-	private static final String ORDER_RESPONSE_QUEUE = "order-response-queue";
-
-    @JmsListener(destination = ORDER_RESPONSE_QUEUE)
+	private static final String ACTIVEMQ_QUEUE = "testSpringQueue";
+	
+    @JmsListener(destination = ACTIVEMQ_QUEUE)
 	public void onMesageReceived(Message<Object> message){
 		if(log.isTraceEnabled()){
 			log.trace("onMessageReceived()");
+			
 		}
         MessageHeaders headers =  message.getHeaders();
         

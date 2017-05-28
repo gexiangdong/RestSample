@@ -7,7 +7,14 @@
 						http://www.springframework.org/schema/jms/spring-jms.xsd">
 
     <jms:annotation-driven />
-   
+
+    <!-- 定义消息队列 jmsTemplate缺省发到此队列 -->
+    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg>
+            <value>testSpringQueue</value>
+        </constructor-arg>
+    </bean>
+       
 	<!-- 发消息用 -->
 	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
 		destroy-method="stop">
@@ -22,7 +29,9 @@
 	<!-- Spring JMS Template -->
 	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
 		<property name="connectionFactory"  ref="jmsFactory" />
+		<property name="defaultDestination" ref="queueDestination" />
 	</bean>
+
 
 
     <!-- 收消息用 -->

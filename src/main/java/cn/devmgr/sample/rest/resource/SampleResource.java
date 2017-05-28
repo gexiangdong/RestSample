@@ -12,7 +12,6 @@ import javax.annotation.Resource;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -35,13 +34,6 @@ import javax.ws.rs.core.SecurityContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Queue;
-import javax.jms.Session;
-
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -85,8 +77,7 @@ public class SampleResource {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("orderId",  order.getId());
 		map.put("date", new Date().getTime());
-	    jmsTemplate.convertAndSend("order-response-queue", map);
-       
+	    jmsTemplate.convertAndSend(map);
 	   
 		result += "<br/> config.properties: fileFolder=" + fileFolder;
 		return Response.status(200).entity(result).build();
